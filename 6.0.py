@@ -80,11 +80,11 @@ def project():
 #界面窗口按钮，输入框，标签
 #csv文件路径
 Label(root,text = "Excel文件路径:").grid(row = 1, column = 0)
-text_1=Entry(root).grid(row = 1, column = 1)
+Entry(root).grid(row = 1, column = 1)
 Button(root, text = "选择文件", command = selectExcel).grid(row = 1, column = 2)
 #保存路径
 Label(root,text = "保存路径:").grid(row = 2, column = 0)
-text_2=Entry(root).grid(row = 2, column = 1)
+Entry(root).grid(row = 2, column = 1)
 Button(root, text = "选择路径", command = selectSave).grid(row = 2, column = 2)
 #执行主项目
 Button(root, text = "执行", command = project).grid(row = 3, column = 2)

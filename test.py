@@ -10,10 +10,12 @@ from tkinter import messagebox
 import time
 import re
 import threading
+import os
 
 option = webdriver.ChromeOptions()
 option.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
-chrome_driver = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"
+# chrome_driver = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe"
+chrome_driver = os.environ.get('CHROME_DRIVER')
 browser = webdriver.Chrome(chrome_driver, chrome_options=option)
 wait = WebDriverWait(browser, 10)
 
@@ -49,12 +51,15 @@ def editPice(normal_price, num):
         if i%2 == 0:
             if int(price_amount_inputs[i].get_attribute('value')) == 100:
                 price_amount_inputs[i+1].send_keys(Keys.CONTROL,'a')
-                price = round(round(normal_price*1.1, 2)*1.1, 2)
+                price = round(normal_price + 0.02, 2)
+                print(price)
                 price_amount_inputs[i+1].send_keys(str(price))
                 
             elif int(price_amount_inputs[i].get_attribute('value')) == 1000:
                 price_amount_inputs[i+1].send_keys(Keys.CONTROL,'a')
-                price = round(normal_price*1.1, 2)
+                price = round(normal_price + 0.01, 2)
+                print(price)
+
                 price_amount_inputs[i+1].send_keys(str(price))
 
             elif int(price_amount_inputs[i].get_attribute('value')) == 3000:
@@ -63,16 +68,24 @@ def editPice(normal_price, num):
 
             elif int(price_amount_inputs[i].get_attribute('value')) == 30000:
                 price_amount_inputs[i+1].send_keys(Keys.CONTROL,'a')
-                price = round(normal_price*0.9, 2)
+                price = round(normal_price - 0.01, 2)
+                print(price)
+
                 price_amount_inputs[i+1].send_keys(str(price))
                 
             elif int(price_amount_inputs[i].get_attribute('value')) == 300000:
                 price_amount_inputs[i+1].send_keys(Keys.CONTROL,'a')
-                price = round(round(normal_price*0.9, 2)*0.8, 2)
+                price = round(normal_price - 0.02, 2)
+                print(price)
+
                 price_amount_inputs[i+1].send_keys(str(price))
 
-    close_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'body > div.next-overlay-wrapper.opened > div.next-dialog.next-closeable.next-overlay-inner.posting-price-dialog > a'))) 
-    close_button.click()
+    time.sleep(1)
+
+    confirm_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'body > div.next-overlay-wrapper.opened > div.next-dialog.next-closeable.next-overlay-inner.posting-price-dialog > div.next-dialog-footer.next-align-right > button.next-btn.next-medium.next-btn-primary.next-dialog-btn'))) 
+    confirm_button.click()
+
+    time.sleep(1)
 
 
 def main():
@@ -83,6 +96,7 @@ def main():
     Label(root,text = "型号:").grid(row = 1, column = 0)
     model=Entry(root)
     model.grid(row = 1, column = 1)
+    Button(root, text = "搜索", width=5).grid(row = 1, column = 2)
     # 底价
     Label(root,text = "底价:").grid(row = 2, column = 0)
     price=Entry(root)
@@ -118,7 +132,7 @@ def main():
                 if i+1 != get_page_count():
                     nextpage_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#ballon-container > div.posting-manage > div > div > div > div.next-pagination.next-medium.next-normal.component-list-pagination > div.next-pagination-pages > button.next-btn.next-medium.next-btn-normal.next-pagination-item.next-next')))
                     nextpage_button.click()
-                    time.sleep(2)
+                    # time.sleep(2)
                 else:
                     messagebox.showinfo('结束', '程序结束')
                     break
